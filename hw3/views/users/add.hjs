@@ -1,0 +1,15 @@
+<form hx-post="/users" hx-target="#message">
+	<select class="form-select" name="roleId">
+		<option value="">--- Select a role ---</option>
+		{{#roles}}
+			<option value="{{id}}">{{name}}</option>
+		{{/roles}}
+	</select>
+	<input class="form-control" type="text" name="first_name" placeholder="First name" required>
+	<input class="form-control" type="text" name="last_name" placeholder="Last name" required>
+	<input class="form-control" type="email" name="email" placeholder="Email" required>
+	<input class="form-control" type="text" name="username" placeholder="Username" required>
+	<input class="form-control" type="password" name="password" placeholder="Password" required>
+	<button class="btn btn-primary" type="submit">Create User</button>
+</form>
+<div id="message"></div>

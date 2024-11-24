@@ -68,6 +68,10 @@ const products = require('./routes/products');
 products.connection = connection;
 app.use('/products', products);
 
+const users = require('./routes/users');
+users.connection = connection;
+app.use('/users', users);
+
 app.listen(8081, function() {
 	console.log('Web server listening on port 8081!');
 });

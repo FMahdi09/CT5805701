@@ -1,0 +1,10 @@
+<h2> Users </h2>
+<select class="form-select" name="roleId"
+	hx-get="/users/typedList" hx-target="#users">
+		<option value="">--- Select a role ---</option>
+		{{#roles}}
+		<option value="{{id}}">{{name}}</option>
+		{{/roles}}
+</select>
+<div id="users"></div>
+

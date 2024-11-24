@@ -1,0 +1,14 @@
+<form hx-put="/users/{{ID}}" hx-target="closest tr" hx-swap="outerHTML">
+	<input type="text" name="first_name" value="{{first_name}}" required>
+	<input type="text" name="last_name" value="{{last_name}}" required>
+	<input type="text" name="username" value="{{username}}" required>
+	<input type="text" name="email" value="{{email}}" required>
+	<button type="submit" class="btn btn-success" title="Update"
+		name="action" value="update">
+		<i class="bi bi-check-lg"></i>
+	</button>
+	<button type="submit" class="btn btn-warning" title="Cancel"
+		name="action" value="cancel">
+		<i class="bi bi-x-lg"></i>
+	</button>
+</form>
