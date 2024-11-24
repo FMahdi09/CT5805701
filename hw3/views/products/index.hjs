@@ -1,0 +1,25 @@
+<h2> Product Types </h2>
+<table class="table table-striped table-hover table-sm">
+	<thead>
+		<tr>
+			<th>id</th>
+			<th>name</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{#data}}
+			{{> row}}
+		{{/data}}
+		<tr id="add">
+			<td colspan='2' class="text-center">
+				<form hx-post="/products" hx-target="closest tr" hx-swap="beforebegin">
+					<input type="text" name="name" placeholder="New Name" required>
+					<button class='btn btn-success'>
+						<i class="bi bi-plus-circle-fill"></i>
+					Add
+					</button>
+				</form>
+			</td>
+		</tr>
+	</tbody>
+</table>

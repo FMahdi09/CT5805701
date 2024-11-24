@@ -64,6 +64,10 @@ const contracts = require('./routes/contracts');
 contracts.connection = connection;
 app.use('/contracts', contracts);
 
+const products = require('./routes/products');
+products.connection = connection;
+app.use('/products', products);
+
 app.listen(8081, function() {
 	console.log('Web server listening on port 8081!');
 });
