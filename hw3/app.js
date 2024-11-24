@@ -56,6 +56,10 @@ const locations = require('./routes/locations');
 locations.connection = connection;
 app.use('/locations', locations);
 
+const roles = require('./routes/roles');
+roles.connection = connection;
+app.use('/roles', roles);
+
 app.listen(8081, function() {
 	console.log('Web server listening on port 8081!');
 });
