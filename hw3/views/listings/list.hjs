@@ -1,0 +1,15 @@
+<table class="table">
+	<thead>
+		<tr>
+			<th> Listing ID </th>
+			<th> Title</th>
+			<th> Price</th>
+			<th> Seller</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{#listings}}
+			{{> listrow}}
+		{{/listings}}
+	</tbody>
+</table>

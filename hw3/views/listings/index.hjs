@@ -1,0 +1,25 @@
+<h2> Listings </h2>
+<form hx-get="/listings/search" hx-target="#listings">
+	<select class="form-select" name="productId">
+			<option value="">--- Select a product type ---</option>
+			{{#products}}
+			<option value="{{id}}">{{name}}</option>
+			{{/products}}
+	</select>
+	<select class="form-select" name="contractId">
+			<option value="">--- Select a contract type ---</option>
+			{{#contracts}}
+			<option value="{{id}}">{{name}}</option>
+			{{/contracts}}
+	</select>
+	<select class="form-select" name="locationId">
+			<option value="">--- Select a location ---</option>
+			{{#locations}}
+			<option value="{{id}}">{{state}}</option>
+			{{/locations}}
+	</select>
+	<input type="text" placeholder="Search title" name="searchquery">
+	<button class="btn btn-primary" type="submit">Search</button>
+</form>
+
+<div id="listings"></div>

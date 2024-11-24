@@ -27,6 +27,16 @@
 						<li><a class="dropdown-item" href="/users/add">Add a User</a></li>
 					</ul>
 				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+						Listings
+					</a>
+					<ul class="dropdown-menu" hx-target="#main">
+						<li><a class="dropdown-item" href="/listings/">Search Listings</a></li>
+						<li><a class="dropdown-item" href="/listings/add">Create a Listing</a></li>
+					</ul>
+				</li>
+
 			</ul>
 		</div>
 	</div>

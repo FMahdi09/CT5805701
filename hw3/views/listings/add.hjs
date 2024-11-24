@@ -1,0 +1,30 @@
+<form hx-post="/listings" hx-target="#message">
+	<select class="form-select" name="productId">
+			<option value="">--- Select a product type ---</option>
+			{{#products}}
+			<option value="{{id}}">{{name}}</option>
+			{{/products}}
+	</select>
+	<select class="form-select" name="contractId">
+			<option value="">--- Select a contract type ---</option>
+			{{#contracts}}
+			<option value="{{id}}">{{name}}</option>
+			{{/contracts}}
+	</select>
+	<select class="form-select" name="locationId">
+			<option value="">--- Select a location ---</option>
+			{{#locations}}
+			<option value="{{id}}">{{state}}</option>
+			{{/locations}}
+	</select>
+	<select class="form-select" name="userId">
+			<option value="">--- Select a User ---</option>
+			{{#users}}
+			<option value="{{id}}">{{username}}</option>
+			{{/users}}
+	</select>
+	<input class="form-control" type="text" name="title" placeholder="Title" required>
+	<input class="form-control" type="number" name="price" placeholder="Price" required>
+	<button class="btn btn-primary" type="submit">Create Listing</button>
+</form>
+<div id="message"></div>
