@@ -1,10 +1,14 @@
 const express = require('express');
 const db = require('mysql2');
+const cookieParser = require('cookie-parser')
+
 const app = express();
 
 app.set('view engine', 'hjs');
+app.use(cookieParser('secretingredient'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+
 
 const configs = require('./config');
 
@@ -32,25 +36,47 @@ app.get('/', (req, res) => {
 			title: 'Welcome to GearHub',
 			partials: {
 				navbar: 'navbar',
-			}
+			},
+			loggedIn: req.cookies.loggedIn,
+			admin: req.cookies.admin,
+			id: req.cookies.id,
+			loginMessage: req.cookies.loginMessage
 		});
 	}
 });
 
-app.get('/*', function(req, res, next) {
-	if (req.get("HX-Request")) {
-		next();
-	}
-	else {
-		res.render('layout', {
-			title: 'Welcome to McDonald e-management',
-			partials: {
-				navbar: 'navbar',
-			},
-			where: req.url
-		});
-	}
+app.post('/login', function(req, res, next) {
+	let SQL = "SELECT users.id as id, roles.name as role FROM users JOIN roles ON users.fk_role_id=roles.id WHERE username = ? AND password = ?";
+
+	connection.execute(SQL, [req.body.username, req.body.password], function(err, data) {
+		if (err) {
+			console.log("Database Error: ", err);
+			res.status(404).send(err.sqlMessage);
+		}
+		else {
+			if (data[0]) {
+				res.cookie("loggedIn", true)
+				res.cookie(data[0].role, true)
+				res.cookie("id", data[0].id)
+				res.clearCookie("loginMessage")
+			}
+			else {
+				res.cookie("loginMessage", "invalid credentials")
+			}
+
+			res.redirect("/")
+		}
+	});
 });
+
+app.post('/logout', function(req, res, next) {
+	res.clearCookie("loggedIn")
+	res.clearCookie("admin")
+	res.clearCookie("user")
+	res.clearCookie("id")
+
+	res.redirect("/")
+})
 
 const locations = require('./routes/locations');
 locations.connection = connection;

@@ -17,12 +17,6 @@
 			<option value="{{id}}">{{state}}</option>
 			{{/locations}}
 	</select>
-	<select class="form-select" name="userId">
-			<option value="">--- Select a User ---</option>
-			{{#users}}
-			<option value="{{id}}">{{username}}</option>
-			{{/users}}
-	</select>
 	<input class="form-control" type="text" name="title" placeholder="Title" required>
 	<input class="form-control" type="number" name="price" placeholder="Price" required>
 	<button class="btn btn-primary" type="submit">Create Listing</button>

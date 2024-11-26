@@ -40,7 +40,8 @@ app.get("/search", function(req, res) {
 	doSQL(SQL, [req.query.productId, req.query.contractId, req.query.locationId, "%" + req.query.searchquery + "%"], res, function(data) {
 		res.render('listings/list', {
 			listings: data,
-			partials: { listrow: 'listings/listrow' }
+			partials: { listrow: 'listings/listrow' },
+			admin: req.cookies.admin
 		});
 	});
 });
@@ -49,20 +50,15 @@ app.get('/add', function(req, res) {
 	let SQL = "SELECT id, name FROM contract_type";
 	let SQL1 = "SELECT id, name FROM product_type";
 	let SQL2 = "SELECT id, state FROM location";
-	let SQL3 = "SELECT id, username FROM users";
 	doSQL(SQL, [], res, function(data) {
 		let contracts = data;
 		doSQL(SQL1, [], res, function(data) {
 			let products = data;
 			doSQL(SQL2, [], res, function(data) {
-				let locations = data;
-				doSQL(SQL3, [], res, function(data) {
-					res.render('listings/add', {
-						contracts: contracts,
-						products: products,
-						locations: locations,
-						users: data
-					});
+				res.render('listings/add', {
+					contracts: contracts,
+					products: products,
+					locations: data
 				});
 			});
 		});
@@ -74,7 +70,7 @@ app.post('/', function(req, res) {
 	let SQL1 = "INSERT INTO orders (status, fk_listing_id, fk_seller_id) VALUES('open', ?, ?)";
 	doSQL(SQL, [req.body.title, req.body.price, req.body.productId, req.body.contractId, req.body.locationId], res, function(data) {
 		let listingId = data.insertId;
-		doSQL(SQL1, [listingId, req.body.userId], res, function(data) {
+		doSQL(SQL1, [listingId, req.cookies.id], res, function(data) {
 			res.send(`Listing ${req.body.title} added with id ${listingId}`);
 		});
 	});

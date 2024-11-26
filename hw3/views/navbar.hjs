@@ -6,6 +6,7 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarContent">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+			{{#admin}}
 				<li class="nav-item">
 					<a class="nav-link" href="/locations/">Locations</a>
 				</li>
@@ -27,13 +28,16 @@
 						<li><a class="dropdown-item" href="/users/add">Add a User</a></li>
 					</ul>
 				</li>
+			{{/admin}}
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
 						Listings
 					</a>
 					<ul class="dropdown-menu" hx-target="#main">
 						<li><a class="dropdown-item" href="/listings/">Search Listings</a></li>
-						<li><a class="dropdown-item" href="/listings/add">Create a Listing</a></li>
+						{{#loggedIn}}
+							<li><a class="dropdown-item" href="/listings/add">Create a Listing</a></li>
+						{{/loggedIn}}
 					</ul>
 				</li>
 

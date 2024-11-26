@@ -13,9 +13,22 @@
 </head>
 <body class="container">
 	<header class="text-center">
-		<h1>GearHub Managment System</h1>
+		<h1>GearHub</h1>
 	</header>
 	{{> navbar}}
+	{{^loggedIn}}
+		<form action="/login" method="post">
+			<input type="text" name="username" placeholder="Username" required>
+			<input type="password" name="password" placeholder="Password" required>
+			<button type="submit">Login</button>
+		</form>
+		{{loginMessage}}
+	{{/loggedIn}}
+	{{#loggedIn}}
+		<form action="/logout" method="post">
+			<button type="submit">Logout</button>
+		</form>
+	{{/loggedIn}}
 	<div id="toast"></div>
 	<main id="main" hx-ext="response-targets" hx-target-error="#toast"
 		{{#where}} hx-trigger="load" hx-get="{{where}}" {{/where}}
@@ -25,7 +38,7 @@
 		</div>
 	</main>
 	<footer class="text-center">
-		<p>&copy; 2024 My McDonald e-Management</p>
+		<p>&copy; 2024 Gearhub </p>
 	</footer>
 </body>
 </html>
