@@ -1,0 +1,12 @@
+<form hx-put="/listings/{{ID}}" hx-target="closest tr" hx-swap="outerHTML">
+	<input type="text" name="title" value="{{title}}" required>
+	<input type="text" name="price" value="{{price}}" required>
+	<button type="submit" class="btn btn-success" title="Update"
+		name="action" value="update">
+		<i class="bi bi-check-lg"></i>
+	</button>
+	<button type="submit" class="btn btn-warning" title="Cancel"
+		name="action" value="cancel">
+		<i class="bi bi-x-lg"></i>
+	</button>
+</form>

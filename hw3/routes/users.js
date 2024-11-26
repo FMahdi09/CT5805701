@@ -55,7 +55,6 @@ app.post('/', function(req, res) {
 	});
 });
 
-
 app.get("/:ID", function(req, res) {
 	let SQL = "SELECT first_name, last_name, username, email FROM users WHERE id = ?";
 	app.connection.execute(SQL, [req.params.ID], function(err, data) {

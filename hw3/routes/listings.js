@@ -88,5 +88,70 @@ app.delete('/:id', function(req, res) {
 	});
 });
 
+app.put("/:ID", function(req, res) {
+	let showRow = function() {
+		let SQL = "SELECT users.username as seller , listings.id as id, title, price FROM listings " +
+			"JOIN orders ON listings.id=orders.fk_listing_id " +
+			"JOIN users ON orders.fk_seller_id=users.id WHERE listings.id = ?";
+
+		app.connection.execute(SQL, [req.params.ID], function(err, data) {
+			if (err) {
+				console.log("Error fetching data: ", err);
+				res.status(404).send(err.sqlMessage);
+			}
+			else {
+				res.render('listings/listrow', {
+					id: req.params.ID,
+					title: data[0].title,
+					price: data[0].price,
+					seller: data[0].seller,
+					admin: req.cookies.admin
+				});
+			}
+		});
+	};
+	if (req.body.action == "update") {
+		let SQL = "UPDATE listings SET title = ?, price = ? WHERE id = ?";
+		const title = req.body.title;
+		const price = req.body.price;
+		const ID = req.params.ID;
+		app.connection.execute(SQL, [title, price, ID], function(err, data) {
+			if (err) {
+				console.log("Error updating data: ", err);
+				res.status(404).send(err.sqlMessage);
+			}
+			else {
+				showRow();
+			}
+		});
+	}
+	else {
+		showRow();
+	}
+});
+
+app.get("/:ID", function(req, res) {
+	let SQL = "SELECT users.username as seller , listings.id as id, title, price FROM listings " +
+		"JOIN orders ON listings.id=orders.fk_listing_id " +
+		"JOIN users ON orders.fk_seller_id=users.id WHERE listings.id = ?";
+
+	app.connection.execute(SQL, [req.params.ID], function(err, data) {
+		if (err) {
+			console.log("Error fetching data: ", err);
+			res.status(404).send(err.sqlMessage);
+		}
+		else {
+			res.render('listings/edit', {
+				ID: req.params.ID,
+				title: data[0].title,
+				price: data[0].price,
+				seller: data[0].seller,
+			});
+		}
+	});
+});
+
+
+
 
 module.exports = app;
