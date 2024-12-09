@@ -13,7 +13,9 @@ app.use(express.static("public"));
 app.use(session({
 	secret: "mySecret",
 	resave: false,
-	saveUninitialized: true
+	saveUninitialized: true,
+	name: "notTheDefaultName",
+	sameSite: "strict"
 }))
 
 
@@ -47,7 +49,8 @@ app.get('/', (req, res) => {
 			loggedIn: req.session.loggedIn,
 			admin: req.session.admin,
 			id: req.session.id,
-			loginMessage: req.cookies.loginMessage
+			loginMessage: req.cookies.loginMessage,
+			registerMessage: req.cookies.registerMessage
 		});
 	}
 });
@@ -82,9 +85,46 @@ app.post('/login', function(req, res, next) {
 	});
 });
 
+app.post('/register', function(req, res, next) {
+	let SQL = "SELECT * FROM users WHERE username = ?";
+
+	connection.execute(SQL, [req.body.username], function(err, data) {
+		if (err) {
+			console.log("Database Error: ", err);
+			res.status(404).send(err.sqlMessage);
+		}
+		else {
+			if (data[0]) {
+				res.cookie("registerMessage", "Username already exists")
+
+				res.redirect("/")
+			}
+		}
+	});
+
+	res.clearCookie("registerMessage")
+
+	SQL = "INSERT INTO users (first_name, last_name, username, password, email) VALUES (?, ?, ?, ?, ?)";
+
+	connection.execute(SQL, [req.body.firstname, req.body.lastname, req.body.username, req.body.password, req.body.email], function(err, data) {
+		if (err) {
+			console.log("Database Error: ", err);
+			res.status(404).send(err.sqlMessage);
+		}
+		else {
+			res.cookie("registerMessage", "Register successfull, please log in")
+
+			res.redirect("/")
+		}
+
+	});
+})
+
 app.post('/logout', function(req, res, next) {
 	req.session.destroy();
 
+	res.clearCookie("registerMessage")
+	res.clearCookie("loginMessage")
 	res.redirect("/")
 })
 
