@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('mysql2');
 const cookieParser = require('cookie-parser')
+const session = require('express-session')
 
 const app = express();
 
@@ -8,6 +9,12 @@ app.set('view engine', 'hjs');
 app.use(cookieParser('secretingredient'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+
+app.use(session({
+	secret: "mySecret",
+	resave: false,
+	saveUninitialized: true
+}))
 
 
 const configs = require('./config');
@@ -37,9 +44,9 @@ app.get('/', (req, res) => {
 			partials: {
 				navbar: 'navbar',
 			},
-			loggedIn: req.cookies.loggedIn,
-			admin: req.cookies.admin,
-			id: req.cookies.id,
+			loggedIn: req.session.loggedIn,
+			admin: req.session.admin,
+			id: req.session.id,
 			loginMessage: req.cookies.loginMessage
 		});
 	}
@@ -55,9 +62,15 @@ app.post('/login', function(req, res, next) {
 		}
 		else {
 			if (data[0]) {
-				res.cookie("loggedIn", true)
-				res.cookie(data[0].role, true)
-				res.cookie("id", data[0].id)
+				req.session.loggedIn = true;
+				req.session.id = data[0].id;
+
+				if (data[0].role === "admin") {
+					req.session.admin = true;
+				}
+				else if (data[0].role === "user") {
+					req.session.user = true;
+				}
 				res.clearCookie("loginMessage")
 			}
 			else {
@@ -70,10 +83,7 @@ app.post('/login', function(req, res, next) {
 });
 
 app.post('/logout', function(req, res, next) {
-	res.clearCookie("loggedIn")
-	res.clearCookie("admin")
-	res.clearCookie("user")
-	res.clearCookie("id")
+	req.session.destroy();
 
 	res.redirect("/")
 })
