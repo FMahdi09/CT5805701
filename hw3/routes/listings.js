@@ -38,13 +38,52 @@ app.get("/search", function(req, res) {
 		"JOIN users ON orders.fk_seller_id=users.id " +
 		"WHERE fk_product_id = ? AND fk_contract_id = ? AND fk_location_id = ? AND title LIKE ? AND fk_buyer_id IS NULL ";
 	doSQL(SQL, [req.query.productId, req.query.contractId, req.query.locationId, "%" + req.query.searchquery + "%"], res, function(data) {
-		res.render('listings/list', {
+		res.render('listings/selling', {
 			listings: data,
 			partials: { listrow: 'listings/listrow' },
-			admin: req.cookies.admin
+			admin: req.session.admin
 		});
 	});
 });
+
+app.get("/selling", function(req, res) {
+	let SQL = "SELECT users.username as seller , listings.id, title, price FROM listings " +
+		"JOIN orders ON listings.id=orders.fk_listing_id " +
+		"JOIN users ON orders.fk_seller_id=users.id " +
+		"WHERE fk_seller_id = ?";
+
+	doSQL(SQL, [req.session.userid], res, function(data) {
+		res.render('listings/selling', {
+			listings: data,
+			partials: { listrow: 'listings/sellingrow' },
+			admin: req.session.admin
+		});
+	});
+});
+
+app.get("/bought", function(req, res) {
+	let SQL = "SELECT users.username as seller , listings.id, title, price FROM listings " +
+		"JOIN orders ON listings.id=orders.fk_listing_id " +
+		"JOIN users ON orders.fk_seller_id=users.id " +
+		"WHERE fk_buyer_id = ?";
+
+	doSQL(SQL, [req.session.userid], res, function(data) {
+		res.render('listings/selling', {
+			listings: data,
+			partials: { listrow: 'listings/sellingrow' },
+			admin: req.session.admin
+		});
+	});
+});
+
+app.delete("/buy/:id", function(req, res) {
+	let SQL = "UPDATE orders SET fk_buyer_id = ? WHERE fk_listing_id = ?";
+
+	doSQL(SQL, [req.session.userid, req.params.id], res, function(data) {
+		res.send("")
+	});
+});
+
 
 app.get('/add', function(req, res) {
 	let SQL = "SELECT id, name FROM contract_type";
@@ -70,7 +109,7 @@ app.post('/', function(req, res) {
 	let SQL1 = "INSERT INTO orders (status, fk_listing_id, fk_seller_id) VALUES('open', ?, ?)";
 	doSQL(SQL, [req.body.title, req.body.price, req.body.productId, req.body.contractId, req.body.locationId], res, function(data) {
 		let listingId = data.insertId;
-		doSQL(SQL1, [listingId, req.cookies.id], res, function(data) {
+		doSQL(SQL1, [listingId, req.session.userid], res, function(data) {
 			res.send(`Listing ${req.body.title} added with id ${listingId}`);
 		});
 	});
@@ -105,7 +144,7 @@ app.put("/:ID", function(req, res) {
 					title: data[0].title,
 					price: data[0].price,
 					seller: data[0].seller,
-					admin: req.cookies.admin
+					admin: req.session.admin
 				});
 			}
 		});

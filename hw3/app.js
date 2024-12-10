@@ -14,8 +14,7 @@ app.use(session({
 	secret: "mySecret",
 	resave: false,
 	saveUninitialized: true,
-	name: "notTheDefaultName",
-	sameSite: "strict"
+	name: "notTheDefaultName"
 }))
 
 
@@ -48,7 +47,7 @@ app.get('/', (req, res) => {
 			},
 			loggedIn: req.session.loggedIn,
 			admin: req.session.admin,
-			id: req.session.id,
+			id: req.session.userid,
 			loginMessage: req.cookies.loginMessage,
 			registerMessage: req.cookies.registerMessage
 		});
@@ -66,7 +65,7 @@ app.post('/login', function(req, res, next) {
 		else {
 			if (data[0]) {
 				req.session.loggedIn = true;
-				req.session.id = data[0].id;
+				req.session.userid = data[0].id;
 
 				if (data[0].role === "admin") {
 					req.session.admin = true;

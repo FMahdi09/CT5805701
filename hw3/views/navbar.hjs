@@ -37,6 +37,8 @@
 						<li><a class="dropdown-item" href="/listings/">Search Listings</a></li>
 						{{#loggedIn}}
 							<li><a class="dropdown-item" href="/listings/add">Create a Listing</a></li>
+							<li><a class="dropdown-item" href="/listings/selling">View your created Listings</a></li>
+							<li><a class="dropdown-item" href="/listings/bought">View your bought Listings</a></li>
 						{{/loggedIn}}
 					</ul>
 				</li>

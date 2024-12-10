@@ -1,3 +1,4 @@
+
 <tr>
 	<td>
 		{{#admin}}
@@ -12,12 +13,6 @@
 	<td> {{price}} </td>
 	<td> {{seller}} </td>
 	<td>
-			<span class="btn btn-primary"
-				hx-delete="/listings/buy/{{id}}" hx-target="closest tr"
-				>
-				Buy
-			</span>
-		</td>
 	{{#admin}}
 		<td>
 			<span class="btn btn-primary"
